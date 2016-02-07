@@ -7,26 +7,27 @@ import akka.http.scaladsl.server.Directives.{complete, get, path}
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 
+
+import com.stratio.gosec.learning.model.ColumnValues
+import com.stratio.gosec.learning.service.parsers.ColumnValuesJsonParser._
+import spray.json._
+
+
 /**
-  * Service to
+  * Service to read File
   */
 trait FileReaderService {
   implicit val system:ActorSystem
   implicit val materializer:ActorMaterializer
-  val jsonRequest =
-    ByteString(
-      s"""
-         |{
-         |    "validValues":["test1","test2"]
-         |}
-        """.stripMargin)
+
+  val jsonResponse = ByteString(new ColumnValues(List("test1")).toJson.toString)
+
 
   val route =
     path("Correct") {
       get {
           complete {
-           HttpResponse (status = StatusCodes.OK  ,entity=HttpEntity(MediaTypes.`application/json`, jsonRequest))
-
+           HttpResponse (status = StatusCodes.OK  ,entity=HttpEntity(MediaTypes.`application/json`,jsonResponse))
           }
         }
     }

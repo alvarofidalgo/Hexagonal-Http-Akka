@@ -15,24 +15,13 @@ class FileReaderServiceTest extends WordSpec with ShouldMatchers with ScalatestR
 
       "retrieve all correct value of column name files and exists values" in {
 
-        val jsonRequest =
-
-            s"""
-               |{
-               |    "validValues":["test1","test2"]
-               |}
-        """.stripMargin
-
-        val request = HttpRequest(
-                                       HttpMethods.GET,
-                                       uri = "/Correct",
-                                       entity = HttpEntity(MediaTypes.`application/json`, jsonRequest)
-                                      )
+        val jsonResponseResult = s"""{"ColumnValues":{"validValues":["test1"]}}"""
+        val request = HttpRequest(HttpMethods.GET,uri = "/Correct" )
 
         request ~> route ~> check {
           status shouldEqual StatusCodes.OK
           entityAs[HttpEntity].contentType.toString() shouldBe  MediaTypes.`application/json`.toString()
-          responseAs[String].toString() shouldBe jsonRequest.toString()
+          responseAs[String].toString() shouldBe jsonResponseResult.toString()
         }
       }
   }
